@@ -1,11 +1,13 @@
 {
   "name": "Emergency Hotline Portal",
   "short_name": "Emergency",
+  "description": "Dial Fast | Stay Safe | Act Now",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#ff5858",
   "theme_color": "#ff5858",
-  "description": "Dial Fast | Stay Safe | Act Now",
+  "orientation": "portrait",
+  "lang": "en",
   "icons": [
     {
       "src": "icon-192.png",
@@ -19,7 +21,5 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-  "lang": "en",
-  "orientation": "portrait"
+  ]
 }
