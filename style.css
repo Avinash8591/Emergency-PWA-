@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', Arial, sans-serif;
+    background: linear-gradient(135deg, #ff5858 0%, #f857a6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 370px;
+    margin: 0 auto;
+    padding: 32px 18px 24px 18px;
+    border-radius: 24px;
+    background: rgba(255,255,255,0.10);
+    box-shadow: 0 2px 16px 0 rgba(31, 38, 135, 0.08);
+    text-align: center;
+    backdrop-filter: blur(6px);
+}
+
+.icon {
+    width: 70px;
+    margin-bottom: 18px;
+    border-radius: 16px;
+}
+
+h1 {
+    color: #fff;
+    font-size: 2em;
+    margin-bottom: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+h2 {
+    color: #222;
+    margin: 18px 0 8px 0;
+    font-size: 1.1em;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.medical-info, .contacts, .numbers, .instructions {
+    background: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 18px 0 0 0;
+    text-align: left;
+    box-shadow: none;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.medical-info h2, .contacts h2, .numbers h2, .instructions h2 {
+    color: #e53935;
+    margin-bottom: 8px;
+}
+
+#medicalInfoContent b, .contacts b, .numbers b, .instructions b {
+    color: #e53935;
+}
+
+.actions {
+    margin: 28px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+}
+
+.emergency-btn {
+    background: #fff;
+    color: #e53935;
+    border: none;
+    border-radius: 999px;
+    padding: 14px 0;
+    font-size: 1.1em;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 0;
+    box-shadow: none;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
+    outline: none;
+    min-width: 200px;
+    width: 100%;
+    max-width: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1.5px solid #e53935;
+}
+
+.emergency-btn:hover, .emergency-btn:focus {
+    background: #e53935;
+    color: #fff;
+    transform: scale(1.03);
+}
+
+.edit-btn {
+    background: #fff;
+    color: #e53935;
+    border: 1.2px solid #e53935;
+    border-radius: 999px;
+    padding: 7px 18px;
+    font-size: 1em;
+    margin-top: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.2s, color 0.2s;
+    box-shadow: none;
+}
+
+.edit-btn:hover {
+    background: #e53935;
+    color: #fff;
+}
+
+ul {
+    padding-left: 18px;
+    margin: 0;
+}
+
+li {
+    margin-bottom: 7px;
+    font-size: 1em;
+    color: #333;
+}
+
+a {
+    color: #e53935;
+    text-decoration: underline;
+    font-weight: 700;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #f857a6;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.7);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #fff;
+    color: #e53935;
+    padding: 24px 18px;
+    border-radius: 18px;
+    max-width: 340px;
+    margin: auto;
+    text-align: left;
+    box-shadow: 0 2px 16px #ffd60044;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0 16px 0;
+    border-radius: 8px;
+    border: 1.5px solid #e53935;
+    font-size: 1em;
+    background: #fff8;
+    color: #e53935;
+}
+
+input:focus, textarea:focus {
+    outline: 2px solid #ffd600;
+}
+
+@media (max-width: 600px) {
+    .container {
+        max-width: 98vw;
+        padding: 8vw 2vw 8vw 2vw;
+        border-radius: 0;
+    }
+    .actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .emergency-btn {
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+}

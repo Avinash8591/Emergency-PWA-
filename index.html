@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Emergency Hotline Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts for modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --header-gradient: linear-gradient(135deg, #ff5858 0%, #f857a6 100%);
+      --header-gradient-dark: linear-gradient(135deg, #232526 0%, #414345 100%);
+      --card-radius: 22px;
+      --card-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      --bg: #f6f7fb;
+      --text: #222;
+      --subtext: #666;
+      --border: #e0e0e0;
+      --sos: #e53935;
+      --sos-dark: #b71c1c;
+      --fab: #ff5858;
+      --fab-shadow: 0 4px 16px #ff585855;
+      --transition: 0.18s cubic-bezier(.4,0,.2,1);
+    }
+    [data-theme="dark"] {
+      --header-gradient: var(--header-gradient-dark);
+      --bg: #181a1b;
+      --text: #fff;
+      --subtext: #bbb;
+      --border: #333;
+      --card-shadow: 0 4px 24px rgba(0,0,0,0.25);
+      --fab-shadow: 0 4px 16px #0008;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', Arial, sans-serif;
+      min-height: 100vh;
+      transition: background var(--transition), color var(--transition);
+    }
+    .header {
+      background: var(--header-gradient);
+      color: #fff;
+      padding: 36px 0 22px 0;
+      text-align: center;
+      border-radius: 0 0 22px 22px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      transition: background var(--transition);
+    }
+    .header-title {
+      font-size: 1.7em;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 8px #0002;
+    }
+    .header-sub {
+      font-size: 1em;
+      color: #f3e5f5;
+      font-weight: 400;
+      margin-bottom: 0;
+      letter-spacing: 0.2px;
+    }
+    .main {
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 0 0 48px 0;
+    }
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin: 18px 18px 0 18px;
+      font-size: 0.98em;
+      color: var(--subtext);
+      user-select: none;
+    }
+    .toggle-row label {
+      margin-left: 8px;
+      cursor: pointer;
+    }
+    .search-bar {
+      width: calc(100% - 36px);
+      margin: 16px 18px 0 18px;
+      padding: 13px 18px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      font-size: 1em;
+      background: #fff;
+      color: var(--text);
+      outline: none;
+      box-sizing: border-box;
+      transition: border 0.2s, background 0.2s;
+      box-shadow: 0 1px 4px #0001;
+    }
+    .search-bar:focus {
+      border: 1.5px solid #f857a6;
+      background: #f3e5f5;
+    }
+    .card {
+      background: #fff;
+      border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow);
+      margin: 22px 18px 0 18px;
+      padding: 28px 18px 20px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: box-shadow var(--transition), transform var(--transition);
+      position: relative;
+      overflow: hidden;
+      min-height: 140px;
+    }
+    .card:hover {
+      box-shadow: 0 8px 32px #0002;
+      transform: translateY(-2px) scale(1.015);
+    }
+    .card.ambulance { background: linear-gradient(120deg, #ff5858 60%, #ffb199 100%); color: #fff; }
+    .card.fire { background: linear-gradient(120deg, #ff9800 60%, #ffd600 100%); color: #fff; }
+    .card.police { background: linear-gradient(120deg, #448aff 60%, #b6e0fe 100%); color: #fff; }
+    .card.women { background: linear-gradient(120deg, #d50060 60%, #ffb6c1 100%); color: #fff; }
+    .card.disaster { background: linear-gradient(120deg, #ffb300 60%, #ffe082 100%); color: #fff; }
+    .card .icon {
+      font-size: 2.7em;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 2px 8px #0002);
+      user-select: none;
+    }
+    .card-title {
+      font-size: 1.22em;
+      font-weight: 700;
+      margin-bottom: 2px;
+      letter-spacing: 0.2px;
+      text-shadow: 0 1px 4px #0001;
+    }
+    .card-desc {
+      font-size: 1em;
+      margin-bottom: 16px;
+      color: #fffde7;
+      font-weight: 400;
+      text-shadow: 0 1px 4px #0001;
+    }
+    .call-btn {
+      background: #fff;
+      color: #e53935; /* Always visible on white! */
+      border: none;
+      border-radius: 8px;
+      padding: 12px 32px;
+      font-size: 1.08em;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 1px 4px #0001;
+      transition: background 0.2s, color 0.2s, transform 0.1s;
+      margin-top: 4px;
+      outline: none;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Optional: Card-specific hover for button */
+    .card.ambulance .call-btn:hover { background: #e53935; color: #fff; }
+    .card.fire .call-btn:hover { background: #ff9800; color: #fff; }
+    .card.police .call-btn:hover { background: #1976d2; color: #fff; }
+    .card.women .call-btn:hover { background: #d50060; color: #fff; }
+    .card.disaster .call-btn:hover { background: #ffb300; color: #fff; }
+    .call-btn:active {
+      background: #f3f3f3;
+      transform: scale(0.97);
+    }
+    .section {
+      background: #fff;
+      border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow);
+      margin: 22px 18px 0 18px;
+      padding: 20px 16px 18px 16px;
+      transition: box-shadow var(--transition);
+    }
+    .section-title {
+      font-size: 1.13em;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+      letter-spacing: 0.1px;
+    }
+    .sos-row {
+      display: flex;
+      gap: 14px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .sos-btn, .sos-stop-btn {
+      border: none;
+      border-radius: 8px;
+      padding: 13px 28px;
+      font-size: 1.08em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, transform 0.1s;
+      outline: none;
+      box-shadow: 0 1px 4px #0001;
+    }
+    .sos-btn {
+      background: var(--sos);
+      color: #fff;
+    }
+    .sos-btn:active { background: var(--sos-dark);}
+    .sos-stop-btn {
+      background: #eee;
+      color: #444;
+    }
+    .sos-stop-btn:active { background: #ccc;}
+    .location-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .get-location-btn {
+      background: #2979ff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 11px 20px;
+      font-size: 1.08em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      outline: none;
+      box-shadow: 0 1px 4px #0001;
+    }
+    .get-location-btn:active { background: #1565c0; transform: scale(0.97);}
+    .note-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .note-input {
+      flex: 1;
+      border: 1.2px solid var(--border);
+      border-radius: 8px;
+      padding: 11px;
+      font-size: 1em;
+      background: #f9f9f9;
+      color: var(--text);
+      outline: none;
+      min-width: 0;
+      transition: border 0.2s;
+    }
+    .note-input:focus { border: 1.2px solid #7579ff;}
+    .save-note-btn {
+      background: #43a047;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 11px 18px;
+      font-size: 1.08em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      outline: none;
+      box-shadow: 0 1px 4px #0001;
+    }
+    .save-note-btn:active { background: #2e7031; transform: scale(0.97);}
+    .tips-section {
+      background: #fffde7;
+      border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow);
+      margin: 22px 18px 0 18px;
+      padding: 18px 14px 14px 14px;
+      border-left: 4px solid #ffd600;
+      transition: box-shadow var(--transition);
+    }
+    .tips-section ul {
+      margin: 0 0 0 18px;
+      padding: 0;
+      color: #444;
+      font-size: 1em;
+    }
+    .tips-section li {
+      margin-bottom: 7px;
+    }
+    /* Floating Action Button */
+    .fab {
+      position: fixed;
+      right: 24px;
+      bottom: 32px;
+      background: var(--fab);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 62px;
+      height: 62px;
+      box-shadow: var(--fab-shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      cursor: pointer;
+      z-index: 100;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+      outline: none;
+    }
+    .fab:active {
+      background: #b224ef;
+      transform: scale(0.96);
+    }
+    .fab-label {
+      position: fixed;
+      right: 100px;
+      bottom: 48px;
+      background: #fff;
+      color: #e53935;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 700;
+      box-shadow: 0 2px 8px #0002;
+      z-index: 101;
+      display: none;
+    }
+    .fab:hover + .fab-label, .fab:focus + .fab-label {
+      display: block;
+    }
+    /* Animations */
+    @keyframes sosFlash {
+      0% { background: #fff; }
+      100% { background: #e53935; }
+    }
+    @media (max-width: 600px) {
+      .main { max-width: 100vw; }
+      .header { border-radius: 0 0 16px 16px; }
+      .card, .section, .tips-section { margin-left: 6px; margin-right: 6px; }
+      .fab { right: 12px; bottom: 18px; }
+      .fab-label { right: 80px; bottom: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-title">Emergency Hotline Portal</div>
+    <div class="header-sub">Dial Fast | Stay Safe | Act Now</div>
+  </div>
+  <div class="main">
+    <div class="toggle-row">
+      <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+      <label for="darkModeToggle">Dark Mode</label>
+    </div>
+    <input class="search-bar" type="text" placeholder="Search services..." oninput="filterCards(this.value)">
+    <div id="cards">
+      <div class="card ambulance" data-label="ambulance">
+        <div class="icon" aria-label="Ambulance">🚑</div>
+        <div class="card-title">Ambulance</div>
+        <div class="card-desc">Medical Emergency - 108</div>
+        <a href="tel:108" class="call-btn" aria-label="Call Ambulance">Call Now</a>
+      </div>
+      <div class="card fire" data-label="fire">
+        <div class="icon" aria-label="Fire Truck">🚒</div>
+        <div class="card-title">Fire Department</div>
+        <div class="card-desc">Fire Emergency - 101</div>
+        <a href="tel:101" class="call-btn" aria-label="Call Fire Department">Call Now</a>
+      </div>
+      <div class="card police" data-label="police">
+        <div class="icon" aria-label="Police">👮‍♂️</div>
+        <div class="card-title">Police</div>
+        <div class="card-desc">Crime Help - 100</div>
+        <a href="tel:100" class="call-btn" aria-label="Call Police">Call Now</a>
+      </div>
+      <div class="card women" data-label="women">
+        <div class="icon" aria-label="Women Help">👩‍🦰</div>
+        <div class="card-title">Women Help</div>
+        <div class="card-desc">For Women Safety - 181</div>
+        <a href="tel:181" class="call-btn" aria-label="Call Women Help">Call Now</a>
+      </div>
+      <div class="card disaster" data-label="disaster">
+        <div class="icon" aria-label="Disaster Relief">🌞</div>
+        <div class="card-title">Disaster Relief</div>
+        <div class="card-desc">Natural Disasters - 1078</div>
+        <a href="tel:1078" class="call-btn" aria-label="Call Disaster Relief">Call Now</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">SOS Emergency Alert</div>
+      <div style="font-size:0.97em;color:var(--subtext);margin-bottom:8px;">
+        Use if you're in danger — screen flashes + alarm rings.
+      </div>
+      <div class="sos-row">
+        <button class="sos-btn" onclick="activateSOS()" aria-label="Activate SOS">🔴 Activate SOS</button>
+        <button class="sos-stop-btn" onclick="stopSOS()" aria-label="Stop SOS">✋ Stop SOS</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Your Live Location</div>
+      <div id="locationStatus" style="font-size:0.97em;color:var(--subtext);margin-bottom:8px;">
+        Location permission denied or GPS not available.
+      </div>
+      <div class="location-row">
+        <button class="get-location-btn" onclick="getLocation()" aria-label="Get Location">📍 Get Location</button>
+        <span id="locationLink"></span>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Save Quick Emergency Note</div>
+      <div class="note-row">
+        <input class="note-input" id="noteInput" type="text" placeholder="e.g. I'm stuck in Room #4..." aria-label="Emergency Note">
+        <button class="save-note-btn" onclick="saveNote()" aria-label="Save Note">💾 Save Note</button>
+      </div>
+      <div id="savedNote" style="margin-top:8px;font-size:0.97em;color:var(--subtext);"></div>
+    </div>
+    <div class="tips-section">
+      <div class="section-title" style="margin-bottom:6px;">Safety Tips (works offline)</div>
+      <ul>
+        <li>Hide, stay silent if needed, use signals.</li>
+        <li>Use phone light or sounds if trapped.</li>
+        <li>Speak clearly when emergency operators respond.</li>
+        <li>Enable mobile data/gps if sharing position.</li>
+      </ul>
+    </div>
+  </div>
+  <!-- Floating Action Button for SOS -->
+  <button class="fab" onclick="activateSOS()" aria-label="Quick SOS">🆘</button>
+  <span class="fab-label">Quick SOS</span>
+  <audio id="sosAudio" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae5e2.mp3" loop></audio>
+  <script>
+    // Dark mode toggle
+    function toggleDarkMode() {
+      if (document.getElementById('darkModeToggle').checked) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+      }
+    }
+    // Search filter
+    function filterCards(val) {
+      val = val.toLowerCase();
+      document.querySelectorAll('.card').forEach(card => {
+        card.style.display = card.dataset.label.includes(val) || card.textContent.toLowerCase().includes(val) ? '' : 'none';
+      });
+    }
+    // SOS
+    let sosActive = false;
+    function activateSOS() {
+      if (sosActive) return;
+      sosActive = true;
+      document.body.style.animation = "sosFlash 0.5s infinite alternate";
+      document.getElementById('sosAudio').play();
+    }
+    function stopSOS() {
+      sosActive = false;
+      document.body.style.animation = "";
+      document.getElementById('sosAudio').pause();
+      document.getElementById('sosAudio').currentTime = 0;
+    }
+    // SOS Flash animation
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes sosFlash {
+        0% { background: #fff; }
+        100% { background: #e53935; }
+      }
+    `;
+    document.head.appendChild(style);
+    // Location
+    function getLocation() {
+      if (!navigator.geolocation) {
+        document.getElementById('locationStatus').textContent = "Geolocation not supported!";
+        return;
+      }
+      document.getElementById('locationStatus').textContent = "Getting location...";
+      navigator.geolocation.getCurrentPosition(function(pos) {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        const url = `https://maps.google.com/?q=${lat},${lon}`;
+        document.getElementById('locationStatus').textContent = "Location acquired!";
+        document.getElementById('locationLink').innerHTML = `<a href="${url}" target="_blank">Open in Maps</a>`;
+      }, function() {
+        document.getElementById('locationStatus').textContent = "Could not get location.";
+        document.getElementById('locationLink').innerHTML = "";
+      });
+    }
+    // Note
+    function saveNote() {
+      const note = document.getElementById('noteInput').value;
+      localStorage.setItem('emergencyNote', note);
+      document.getElementById('savedNote').textContent = note ? "Saved: " + note : "";
+    }
+    window.onload = function() {
+      // Restore note
+      const note = localStorage.getItem('emergencyNote');
+      if (note) document.getElementById('savedNote').textContent = "Saved: " + note;
+    }
+  </script>
+</body>
+</html>
